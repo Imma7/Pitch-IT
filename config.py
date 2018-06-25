@@ -6,7 +6,7 @@ class Config:
 class ProdConfig(Config):
     pass
 
-class DevConfig(COnfig):
+class DevConfig(Config):
     DEBUG = True
 
 config_options = {
