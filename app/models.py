@@ -35,3 +35,10 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
     votes = db.relationship('Vote', backref = 'comments', lazy = "dynamic")
+
+class Vote(db.Model):
+    __tablename__ = 'votes'
+    id = db.Column(db.Integer, primary_key = True)
+    vote = db.Column(db.Integer)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+    comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
