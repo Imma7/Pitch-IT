@@ -22,3 +22,8 @@ class Pitch(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     comments = db.relationship('Comment', backref = 'pitches', lazy = "dynamic")
     votes = db.relationship('Vote', backref = 'pitches', lazy = "dynamic")
+
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key = True)
+    category_name = db.Column(db.String)
