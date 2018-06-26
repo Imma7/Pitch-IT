@@ -7,11 +7,13 @@ from .. import db, photos
 
 #Views
 @main.route('/')
-@login_required
+
 def index():
     '''
+    View root page function that returns the index page and its data
     '''
-    pass
+    display_message = "Hello World"
+    return render_template('index.html', message = display_message)
 
 @main.route('/user/<uname>/update/pic', methods = ['POST'])
 @login_required
@@ -37,5 +39,5 @@ def profile(uname):
         user.profile_pic_path = path
         db.session.commit()
     return redirect(url_for('main.profile',uname=uname))
-    
+
     return render_template("profile/profile.html", user = user)
