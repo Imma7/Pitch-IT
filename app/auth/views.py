@@ -14,7 +14,7 @@ def login():
             login_user(user,login_form.remember.data)
             return redirect(request.args.get('next') or url_for('main.index'))
 
-        flash('Invalid username or password')
+        
     title = "Pitch LogIn"
     return render_template('auth/login.html', login_form = login_form, title = title)
 
@@ -28,7 +28,7 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(email = form.email.data, username = form.username.data, password = form.password.data)
+        user = User(email = form.email.data, username =form.username.data, password = form.password.data)
 
         db.session.add(user)
         db.session.commit()
