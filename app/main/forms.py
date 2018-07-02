@@ -20,6 +20,5 @@ class CommentForm(FlaskForm):
 
 #categoryForm
 class CategoryForm(FlaskForm):
-    name = StringField('Pitch', validators=[Required()])
-    title = TextAreaField('Pitch')
+    name = TextAreaField('Category')
     submit = SubmitField()

@@ -12,7 +12,7 @@ def index():
     View root page function that returns the index page and its data
     '''
 
-    # form = PitchForm()
+   
     category = Category.get_categories()
 
 
@@ -28,15 +28,25 @@ def new_category():
 
     if form.validate_on_submit():
         name = form.name.data
-        new_category = Category(category_name=name)
+        new_category = Category(name=name)
         new_category.save_category()
 
-        return redirect(url_for('.new_category'))
+        return redirect(url_for('.index'))
 
-    all_categories = Category.query.order_by('-id').all()
+    
     title = 'New category'
-    return render_template('new_category.html', category_form = form,title=title, categories = all_categories )
+    return render_template('new_category.html', category_form = form,title=title)
 
+@main.route('/categories/<int:id>')
+def category(id):
+    category = PitchCategory.query.get(id)
+    if category is None:
+        abort(404)
+
+    pitches=Pitch.get_pitches(id)
+    title = f'{category.name} page'
+    return render_template('category.html', pitches=pitches, category=category)
+    
 
 @main.route('/user/<uname>/update/pic', methods = ['POST'])
 @login_required
