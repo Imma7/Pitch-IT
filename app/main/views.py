@@ -1,4 +1,4 @@
-from flask import render_template,request,redirect,url_for
+from flask import render_template,request,redirect,url_for, abort
 from . import main
 from ..models import User, Pitch, Category, Vote, Comment
 from flask_login import login_required
@@ -39,14 +39,32 @@ def new_category():
 
 @main.route('/categories/<int:id>')
 def category(id):
-    category = PitchCategory.query.get(id)
+    category = Pitch.query.get(id)
     if category is None:
         abort(404)
 
     pitches=Pitch.get_pitches(id)
     title = f'{category.name} page'
     return render_template('category.html', pitches=pitches, category=category)
-    
+
+#Route for adding a new pitch
+@main.route('/category/new-pitch/<int:id>', methods=['GET', 'POST'])
+@login_required
+def new_pitch(id):
+    '''
+    Function to check Pitches form and fetch data from the fields
+    '''
+    form = PitchForm()
+    category = PitchCategory.query.filter_by(id=id).first()
+
+    if category is None:
+        abort(404)
+
+    if form.validate_on_submit():
+        content = form.content.data
+        new_pitch= Pitch(content=content,category_id= category.id,user_id=current_user.id)
+        new_pitch.save_pitch()
+        return redirect(url_for('.category', id=category.id))
 
 @main.route('/user/<uname>/update/pic', methods = ['POST'])
 @login_required
