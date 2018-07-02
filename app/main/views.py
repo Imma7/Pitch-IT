@@ -7,13 +7,18 @@ from .. import db, photos
 
 #Views
 @main.route('/')
-
 def index():
     '''
     View root page function that returns the index page and its data
     '''
+    title = "One Minute Pitch"
     display_message = "Hello World"
-    return render_template('index.html', message = display_message)
+
+
+
+    return render_template('index.html', title = title, message = display_message)
+
+
 
 @main.route('/user/<uname>/update/pic', methods = ['POST'])
 @login_required

@@ -1,6 +1,19 @@
 {% extends 'base.html'%}
 {% import 'macros.html' as macro%}
 
+{% block styles%}
+    {{ super() }} <!--super() function tells Jinja not to override any code that is defined in the block-->
+    <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+{% endblock %}
+
 {% block content %}
 
-{% endblock  %} %}
+<body>
+    <ul>
+        {% for category in categories %}
+            <li> {{category.category_name}} </li>
+        {% endfor %}
+    </ul>
+</body>
+
+{% endblock  %}
