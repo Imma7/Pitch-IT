@@ -9,9 +9,9 @@
 
     <!--Displaying user bio-->
     {% if user.bio %}
-      <p> {{user.bio}}</p>
+      <p> <strong>{{user.bio| capitalize}} </strong></p>
     {%else%}
-      <p> {{user.username| capitalize}} has no bio </p>
+      <p> <strong>{{user.username| capitalize}} has no bio  </strong></p>
     {% endif %}
   </div>
 
