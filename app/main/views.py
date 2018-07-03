@@ -1,7 +1,7 @@
 from flask import render_template,request,redirect,url_for, abort
 from . import main
 from ..models import User, Pitch, Category, Vote, Comment
-from flask_login import login_required
+from flask_login import login_required, current_user
 from .forms import UpdateProfile, PitchForm, CommentForm, CategoryForm
 from .. import db, photos
 
@@ -39,21 +39,20 @@ def new_category():
 
 @main.route('/categories/<int:id>')
 def category(id):
-    category = Pitch.query.get(id)
-    if category is None:
-        abort(404)
+    category_ = Category.query.get(id)
+    pitches = Pitch.query.filter_by(category=category_.id).all()
 
-    pitches=Pitch.get_pitches(id)
-    title = f'{category.name} page'
-    return render_template('category.html', pitches=pitches, category=category)
+    # pitches=Pitch.get_pitches(id)
+    # title = f'{category.name} page'
+    return render_template('category.html', pitches=pitches, category=category_)
 
 #Route for adding a new pitch
-@main.route('/category/new-pitch/<int:id>', methods=['GET', 'POST'])
+@main.route('/categories/view_pitch/add/<int:id>', methods=['GET', 'POST'])
 @login_required
 def new_pitch(id):
     '''
     Function to check Pitches form and fetch data from the fields
-    '''
+    '''                                             
     form = PitchForm()
     category = Category.query.filter_by(id=id).first()
 
@@ -62,13 +61,15 @@ def new_pitch(id):
 
     if form.validate_on_submit():
         content = form.content.data
-        new_pitch= Pitch(content=content,category_id= category.id,user_id=current_user.id)
+        new_pitch= Pitch(content=content,category= category.id,user_id=current_user.id)
         new_pitch.save_pitch()
         return redirect(url_for('.category', id=category.id))
 
+    title = 'New Pitch'
+    return render_template('new_pitch.html', title = title, pitch_form = form, category = category)
 
 #viewing a Pitch with its comments
-@main.route('/view-pitch/<int:id>', methods=['GET', 'POST'])
+@main.route('/categories/view_pitch/<int:id>', methods=['GET', 'POST'])
 @login_required
 def view_pitch(id):
     '''
@@ -77,15 +78,15 @@ def view_pitch(id):
 
     print(id)
     pitches = Pitch.query.get(id)
-    # pitches = Pitch.query.filter_by(id=id).all()
+    # pitches = P 2itch.query.filter_by(id=id).all()
 
     if pitches is None:
         abort(404)
     #
     comment = Comments.get_comments(id)
-    return render_template('view-pitch.html', pitches=pitches, comment=comment, category_id=id)
+    return render_template('pitch.html', pitches=pitches, comment=comment, category_id=id)
 
-    
+
 @main.route('/user/<uname>/update/pic', methods = ['POST'])
 @login_required
 def profile(uname):

@@ -1,7 +1,7 @@
 {% macro displayCategoryList(category_list) %}
     {% for category in category_list%}
         <div>
-          <a href="{{url_for('.category',id=category.id)}}"><p>{{category.name|upper}}</p></a>
+          <a href="{{url_for('main.category',id=category.id)}}"><p>{{category.name|upper}}</p></a>
         </div>
 
     {% endfor %}
@@ -15,15 +15,13 @@
         <p>{{pitches.name|upper}}</p></a>
         <div class="col-md-10 col-sm-12">
             <h3>{{pitches.content}}</h3>
-            <hr>
-            <h4>  <strong><span><a href=" {{url_for('.view_pitch',id=pitches.id)}}">Read comments</a></span></strong>  </h4>
-
-            <a href=" {{url_for('.post_comment',id=pitches.id)}}"><h4>Comments</h4></a>
+            
+            
       </div>
     </div>
    </div>
 
-    </HISTORY> ..
+    </HISTORY> 
 
   </div>
   {% endfor %}
