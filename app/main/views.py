@@ -55,7 +55,7 @@ def new_pitch(id):
     Function to check Pitches form and fetch data from the fields
     '''
     form = PitchForm()
-    category = PitchCategory.query.filter_by(id=id).first()
+    category = Category.query.filter_by(id=id).first()
 
     if category is None:
         abort(404)
@@ -66,6 +66,26 @@ def new_pitch(id):
         new_pitch.save_pitch()
         return redirect(url_for('.category', id=category.id))
 
+
+#viewing a Pitch with its comments
+@main.route('/view-pitch/<int:id>', methods=['GET', 'POST'])
+@login_required
+def view_pitch(id):
+    '''
+    Function the returns a single pitch for comment to be added
+    '''
+
+    print(id)
+    pitches = Pitch.query.get(id)
+    # pitches = Pitch.query.filter_by(id=id).all()
+
+    if pitches is None:
+        abort(404)
+    #
+    comment = Comments.get_comments(id)
+    return render_template('view-pitch.html', pitches=pitches, comment=comment, category_id=id)
+
+    
 @main.route('/user/<uname>/update/pic', methods = ['POST'])
 @login_required
 def profile(uname):

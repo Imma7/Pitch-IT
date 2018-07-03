@@ -33,16 +33,32 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'User {self.username}'
 
+
 class Pitch(db.Model):
     __tablename__ = 'pitches'
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(255))
-    comment = db.Column(db.String)
+    content = db.Column(db.String)
     category = db.Column(db.String)
     vote = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     comments = db.relationship('Comment', backref = 'pitches', lazy = "dynamic")
     votes = db.relationship('Vote', backref = 'pitches', lazy = "dynamic")
+
+    def save_pitch(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def clear_pitches(cls):
+        Pitch.all_pitches.clear()
+
+    # display pitches
+
+    def get_pitches(id):
+        pitches = Pitch.query.filter_by(category_id=id).all()
+        return pitches
+
 
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -66,12 +82,35 @@ class Comment(db.Model):
     pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
     votes = db.relationship('Vote', backref = 'comments', lazy = "dynamic")
 
+    def save_comment(self):
+        '''
+        Function that saves comments
+        '''
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(self, id):
+        comment = Comments.query.order_by(Comments.time_posted.desc()).filter_by(pitches_id=id).all()
+        return comment
+
+
 class Vote(db.Model):
     __tablename__ = 'votes'
     id = db.Column(db.Integer, primary_key = True)
     vote = db.Column(db.Integer)
     pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
     comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
+
+    def save_vote(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_votes(cls,user_id,pitches_id):
+        votes = Vote.query.filter_by(user_id=user_id, pitches_id=pitches_id).all()
+        return votes
+
 
 class PhotoProfile(db.Model):
     __tablename__ = 'photoprofiles'
