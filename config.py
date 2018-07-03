@@ -6,7 +6,7 @@ class Config:
     UPLOADED_PHOTOS_DEST ='app/static/photos'
 
 class ProdConfig(Config):
-    pass
+    DATABASE_URL=os.environ.get("DATABASE_URL")
 
 class DevConfig(Config):
     DEBUG = True
