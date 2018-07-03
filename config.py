@@ -5,7 +5,7 @@ class Config:
     UPLOADED_PHOTOS_DEST ='app/static/photos'
 
 class ProdConfig(Config):
-    DATABASE_URL=os.environ.get("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
 class DevConfig(Config):
     DEBUG = True
