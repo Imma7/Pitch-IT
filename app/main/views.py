@@ -65,6 +65,7 @@ def new_pitch(id):
         new_pitch.save_pitch()
         return redirect(url_for('.category', id=category.id))
 
+
     title = 'New Pitch'
     return render_template('new_pitch.html', title = title, pitch_form = form, category = category)
 
