@@ -1,22 +1,8 @@
 import unittest
 from app.models import User
 
-class UserTest(unittest.TestCase):
-    '''
-    Test Class to test the behaviour of the Movie class
-    '''
-
-    def setUp(self):
-        '''
-        Set up method that will run before every Test
-        '''
-        self.new_user = User('imma', 1234)
-
-    def test_instance(self):
-        self.assertTrue(isinstance(self.new_user,User))
-
 class UserModelTest(unittest.TestCase):
-    
+
     def setUp(self):
         self.new_user = User(password = '1234')
 
